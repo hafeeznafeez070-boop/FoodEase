@@ -6,9 +6,9 @@ import PasswordGenerator from "../component/passwordGenerator";
 export default function Home() {
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       {/* <Counterapp /> */}
-      <PasswordGenerator />
+      {/* <PasswordGenerator /> */}
     </>
   );
 }
