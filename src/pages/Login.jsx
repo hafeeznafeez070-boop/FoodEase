@@ -1,11 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { credentials } from "../data";
 
 export default function Login() {
   const [emailVal, setEmailVal] = useState("");
   const [passVal, setPassVal] = useState("");
   const loginFunction = (email, password) => {
-    const credentials = { email: "sherry@gmail.com", password: "12345" };
     if (email === credentials.email && password === credentials.password) {
       toast.success("login successfull");
     } else {
