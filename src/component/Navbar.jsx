@@ -1,10 +1,8 @@
 import React from "react";
 
-import { RiHeartFill } from "@remixicon/react";
-
 export default function Navbar() {
   return (
-    <div className="flex pl-20 mt-8 justify-center bg-white">
+    <div className="lg:flex pl-20 mt-8 justify-center bg-white hidden">
       <p className="text-[32px] font-bold">SHOP.CO</p>
       <div className="flex  w-80 justify-around text-xs ml-20 pt-3">
         <select className="mb-5" name="ShopOptions" id="shopOptions">
@@ -24,11 +22,7 @@ export default function Navbar() {
           placeholder="Search for products"
         />
       </div>
-      <RiHeartFill
-        size={36} // set custom `width` and `height`
-        color="red" // set `fill` color
-        className="my-icon" // add custom class name
-      />
+      <i className="ri-user-2-line"></i>{" "}
     </div>
   );
 }

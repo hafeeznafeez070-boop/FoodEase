@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.bgImg {
+  background-image: url("/public/loginImage.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+}
