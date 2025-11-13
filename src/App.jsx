@@ -5,9 +5,15 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/login";
 import Todo from "./pages/Todo";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-  return <Todo />;
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Todo />} />
+    </Routes>
+  );
 }
 
 export default App;

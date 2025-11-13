@@ -1,13 +1,18 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { credentials } from "../data";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [emailVal, setEmailVal] = useState("");
   const [passVal, setPassVal] = useState("");
-  const loginFunction = (email, password) => {
+  const loginFunction = async (email, password) => {
     if (email === credentials.email && password === credentials.password) {
+      await window.localStorage.setItem("token", "login");
       toast.success("login successfull");
+      navigate("/");
     } else {
       toast.error("login failed");
     }
