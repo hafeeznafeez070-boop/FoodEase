@@ -23,12 +23,16 @@ export default function Todo() {
       navigate("/login");
     }
   }, []);
-
+  const logout = () => {
+    navigate("/login");
+    window.localStorage.clear();
+  };
   return (
-    <div className="w-full h-screen bg-amber-50 overflow-hidden flex items-center flex-col">
+    <div className="w-full h-screen bg-neutral-500 overflow-hidden flex items-center flex-col">
       <div className="w-90/100 flex items-center justify-between">
         <h1 className="text-4xl m-4"></h1>
         <button
+          onClick={() => logout()}
           type="button"
           className="w-25 mt-2 focus:outline-none  text-white bg-gray-700 hover:bg-gray-900 focus:ring-4 font-medium rounded-lg text-sm px-5 py-3 ml-2 mb-2 cursor-pointer "
         >
