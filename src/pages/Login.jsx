@@ -2,12 +2,42 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { credentials } from "../data";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [emailVal, setEmailVal] = useState("");
   const [passVal, setPassVal] = useState("");
+
+  // "emilys"
+  // emilyspass
+  const loginTodos = async (email, password) => {
+    console.log("Credentials below");
+    console.log(email);
+    console.log(password);
+    const cred = await fetch("https://dummyjson.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+        expiresInMins: 30, // optional, defaults to 60
+      }),
+    }).then((res) => res.json());
+
+    console.log(cred);
+
+    if (cred.accessToken) {
+      // window.localStorage.setItem(cred.accessToken, "login");
+      console.log(cred.accessToken);
+      toast.success("login successfull");
+      navigate("/");
+    } else {
+      toast.error("login failed");
+    }
+  };
+
   const loginFunction = async (email, password) => {
     if (email === credentials.email && password === credentials.password) {
       await window.localStorage.setItem("token", "login");
@@ -51,7 +81,8 @@ export default function Login() {
             </div>
             <div className="ml-2 w-98/100 border-[#3A5B22] rounded-lg pt-5">
               <button
-                onClick={() => loginFunction(emailVal, passVal)}
+                // onClick={() => loginFunction(emailVal, passVal)}
+                onClick={() => loginTodos(emailVal, passVal)}
                 className="text-white font-semibold w-full text-lg bg-[#3A5B22] rounded-lg focus:outline-2 focus:outline-offset-2 active:bg-[#85da44]"
               >
                 Login

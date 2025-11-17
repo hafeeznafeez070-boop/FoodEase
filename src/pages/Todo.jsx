@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import TodoInputs from "../component/TodoInputs";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 export default function Todo() {
   const navigate = useNavigate();
   const [val, setVal] = useState("");
   const [todoVal, setTodoVal] = useState("");
-
-  const [myTodos, setMyTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
 
   const todoFunc = () => {
     if (val) {
@@ -16,9 +16,21 @@ export default function Todo() {
     }
   };
 
+  const getTodos = async () => {
+    try {
+      const todos = await axios.get("https://dummyjson.com/todos");
+      console.log(todos.data);
+      toast.success("todos fetched");
+      setTodos(todos.data.todos);
+    } catch (error) {
+      toast.error("todos fetched failed");
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
     const token = window.localStorage.getItem("token");
-
+    getTodos();
     if (!token) {
       navigate("/login");
     }
@@ -55,9 +67,10 @@ export default function Todo() {
           Add
         </button>
       </div>
-      {myTodos.map((todo, index) => (
-        <TodoInputs key={index} todoVal={todo} />
-      ))}
+      {todos &&
+        todos.map((todo, index) => (
+          <TodoInputs key={index} todoVal={todo} todos={todos} />
+        ))}
     </div>
   );
 }
