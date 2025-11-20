@@ -1,3 +1,4 @@
+import { text } from "@fortawesome/fontawesome-svg-core";
 import React, { use, useState } from "react";
 
 function TinyApp4() {
@@ -7,22 +8,20 @@ function TinyApp4() {
   const [editVal, setEditVal] = useState("");
 
   const addFunction = () => {
-    if (!todoVal.trim()) return;
     setList((prev) => [...prev, { text: todoVal, completed: false }]);
     setTodoVal("");
   };
 
   const deleteFunction = (index) => {
-    setList((prev) => prev.filter((_, i) => index !== i));
+    setList((prev) => prev.filter((_, i) => i !== index));
   };
   const editStart = (item, index) => {
     setEditIndex(index);
     setEditVal(item.text);
   };
   const saveEdit = (index) => {
-    console.log(editVal);
     setList((prev) =>
-      prev.map((v, i) => (i === index ? { ...v, text: editVal } : v))
+      prev.map((item, i) => (index === i ? { ...item, text: editVal } : item))
     );
     setEditIndex(null);
     setEditVal("");
@@ -30,7 +29,7 @@ function TinyApp4() {
   const toggleCheckBox = (index) => {
     setList((prev) =>
       prev.map((item, i) =>
-        index === i ? { ...item, completed: !item.completed } : item
+        i === index ? { ...item, completed: !item.completed } : item
       )
     );
   };
