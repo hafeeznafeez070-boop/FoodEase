@@ -1,107 +1,124 @@
-import { text } from "@fortawesome/fontawesome-svg-core";
-import React, { use, useState } from "react";
+import { useEffect, useState } from "react";
 
-function TinyApp4() {
+export default function () {
   const [todoVal, setTodoVal] = useState("");
-  const [list, setList] = useState([]);
+  const [todoList, setTodoList] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
-  const [editVal, setEditVal] = useState("");
+  const [editValue, setEditValue] = useState("");
 
   const addFunction = () => {
-    setList((prev) => [...prev, { text: todoVal, completed: false }]);
+    //Load Saved Todos on first Render:
+
+    useEffect(() => {
+      const saved = JSON.parse(localStorage.getItem("todo-react"));
+      if (saved) {
+        setTodoList(saved);
+      }
+    }, []);
+
+    // Save todos whenever list changes
+    useEffect(() => {
+      localStorage.setItem("todos-react", JSON.stringify(todoList));
+    }, [todoList]);
+
+    if (!todoVal.trim()) return;
+    setTodoList((prev) => [...prev, { text: todoVal, completed: false }]);
     setTodoVal("");
   };
 
-  const deleteFunction = (index) => {
-    setList((prev) => prev.filter((_, i) => i !== index));
-  };
-  const editStart = (item, index) => {
-    setEditIndex(index);
-    setEditVal(item.text);
-  };
-  const saveEdit = (index) => {
-    setList((prev) =>
-      prev.map((item, i) => (index === i ? { ...item, text: editVal } : item))
-    );
-    setEditIndex(null);
-    setEditVal("");
-  };
-  const toggleCheckBox = (index) => {
-    setList((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, completed: !item.completed } : item
+  const toggleFunction = (i) => {
+    setTodoList((prev) =>
+      prev.map((item, index) =>
+        index === i ? { ...item, completed: !item.completed } : item
       )
     );
   };
+
+  const deleteFunction = (index) => {
+    setTodoList((prev) => prev.filter((_, i) => index !== i));
+  };
+
+  const editStart = (v, i) => {
+    setEditIndex(i);
+    setEditValue(v.text);
+  };
+
+  const saveEdit = (index) => {
+    if (!editValue.trim()) return;
+    setTodoList((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, text: editValue } : item))
+    );
+    setEditIndex(null);
+    setEditValue("");
+  };
+
   return (
-    <div className="bg-amber-50 flex flex-col justify-center items-center w-full h-screen">
-      <div>
-        <input
-          value={todoVal}
-          onChange={(e) => setTodoVal(e.target.value)}
-          placeholder="Enter a todo"
-          className="border p-2 rounded-xl bg-gray-300 border-b-blue-600 text-md shadow "
-        />
-        <button
-          onClick={addFunction}
-          className="p-2 bg-blue-300 text-white rounded-xl m-3 text-md px-8"
-        >
-          Add
-        </button>
-      </div>
-      <div className=" w-60/100 ">
-        {list.map((item, i) => (
-          <div className="flex w-full justify-between items-center" key={i}>
-            <div className="w-2/3 p-2 px-5 flex border-b">
-              {editIndex === i ? (
+    <div className="bg-amber-100 w-full h-screen">
+      <div className="text-4xl text-center pt-5">The Todo App</div>
+      <div className="flex justify-center mt-10 flex-col items-center">
+        <div>
+          <input
+            value={todoVal}
+            onChange={(e) => setTodoVal(e.target.value)}
+            className="bg-gray-500 p-2 m-2 text-lg rounded-2xl text-white pl-4"
+            placeholder="Enter a Todo"
+          />
+          <button
+            onClick={addFunction}
+            className="bg-purple-500 text-white text-lg rounded-2xl p-2 px-4"
+          >
+            Add
+          </button>
+        </div>
+        {todoList.map((item, index) => (
+          <div className="mt-5 flex w-50/100 justify-between " key={index}>
+            <div className="flex items-center border-b w-2/3 pl-7">
+              <input
+                onChange={() => toggleFunction(index)}
+                className="mr-4 w-4 h-4"
+                type="checkbox"
+              />
+              {editIndex === index ? (
                 <input
-                  className="text-xl mx-2 border w-full p-2 rounded-2xl"
-                  value={editVal}
-                  onChange={(e) => setEditVal(e.target.value)}
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  className="w-full p-2 text-lg border rounded"
                 />
               ) : (
-                <>
-                  <input
-                    className="mx-2 mt-1"
-                    value={item.completed}
-                    onChange={() => toggleCheckBox(i)}
-                    type="checkbox"
-                  />
-                  <p
-                    className={
-                      item.completed
-                        ? "line-through text-gray-500 text-xl mx-2"
-                        : "text-black text-xl mx-2"
-                    }
-                  >
-                    {" "}
-                    {item.text}{" "}
-                  </p>
-                </>
+                <p
+                  className={
+                    item.completed
+                      ? "line-through text-lg text-gray-700 italic"
+                      : "text-lg"
+                  }
+                >
+                  {item.text}
+                </p>
               )}
             </div>
-            <div className="flex m-2 w-1/3">
-              <button
-                onClick={() => deleteFunction(i)}
-                className="bg-red-600 text-white p-2 rounded m-2"
-              >
-                Delete
-              </button>
-              {editIndex === i ? (
+            <div className="w-1/3">
+              {editIndex === index ? (
                 <button
-                  onClick={() => saveEdit(i)}
-                  className="bg-green-600 text-white p-2 rounded m-2"
+                  onClick={() => saveEdit(index)}
+                  className="bg-green-700 text-white p-2 rounded-xl m-2 px-5"
                 >
                   Save
                 </button>
               ) : (
                 <button
-                  onClick={() => editStart(item, i)}
-                  className="bg-blue-600 text-white p-2 rounded m-2"
+                  onClick={() => editStart(item, index)}
+                  className="bg-blue-700 text-white p-2 rounded-xl m-2 px-5"
                 >
                   Edit
                 </button>
               )}
+
+              <button
+                onClick={() => deleteFunction(index)}
+                className="bg-red-700 text-white p-2 rounded-xl m-2 px-3"
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
@@ -109,5 +126,3 @@ function TinyApp4() {
     </div>
   );
 }
-
-export default TinyApp4;
