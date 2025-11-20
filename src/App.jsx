@@ -3,9 +3,13 @@ import { Route, Routes } from "react-router-dom";
 import Todo from "./pages/Todo";
 import Login from "./pages/login";
 import Todo2 from "./pages/Todo2";
+import Counter from "./pages/counter";
+import ControlledInput from "./pages/ControlledInput";
+import ToggleApp from "./pages/ToggleApp";
+import TinyApp4 from "./pages/TinyApp4";
 
 function App() {
-  return <Todo2 />;
+  return <TinyApp4 />;
 }
 
 export default App;
